@@ -70,6 +70,7 @@ def player_input():
 
     if player_first == 'X':
         player_second = 'O'
+        print(f'Бот будет ходить за {player_second}')
     else:
         player_second = 'X'
 
@@ -112,6 +113,17 @@ def player_choice(board, player_mark):
             print(f'Неверное значение: {exc}. Пожалуйста, попробуйте снова.')
 
     position -= 1
+    if space_check(board, position):
+        return position
+
+    return False
+
+
+def bot_choice(board):
+    """Выбор ботом следующей ячейки случайным образом и проверка того можно ли поставить маркер в эту ячейку"""
+
+    position = random.randrange(0, 100)
+
     if space_check(board, position):
         return position
 
@@ -163,6 +175,8 @@ print('Добро пожаловать в игру "Крестики-нолик�
 
 # Выбор игровой роли: крестик или нолик
 PLAYER_MARKS = player_input()
+# Маркер для бота
+BOT_PLAYER_MARK = PLAYER_MARKS[1]
 # Определение случайным образом игрока, который будет ходить первым
 CURRENT_PLAYER_MARK = choose_first()
 
@@ -175,13 +189,21 @@ while True:
 
     print(f'Очередь игрока "{CURRENT_PLAYER_MARK}":')
     # Выбор игроком следующей ячейки для хода и проверка того можно ли поставить маркер в эту ячейку
-    PLAYER_POSITION = player_choice(PLAY_BOARD, CURRENT_PLAYER_MARK)
-    # Установка маркера игрока в указанную позицию
-    place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
+    if CURRENT_PLAYER_MARK == BOT_PLAYER_MARK:
+        PLAYER_POSITION = False
+        while (PLAYER_POSITION is False):
+            PLAYER_POSITION = bot_choice(PLAY_BOARD)
+        # Установка маркера игрока в указанную позицию
+        place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
+    else:
+        PLAYER_POSITION = False
+        while (PLAYER_POSITION is False):
+            PLAYER_POSITION = player_choice(PLAY_BOARD, CURRENT_PLAYER_MARK)
+        # Установка маркера игрока в указанную позицию
+        place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
     D2_matrix = make_D2_matrix(PLAY_BOARD)
-    print(check_game_finish(D2_matrix, CURRENT_PLAYER_MARK))
 
-    # Проверка того, завершена ли игра check_game_finish(D2_matrix, mark)
+    # Проверка того, завершена ли игра
     if check_game_finish(D2_matrix, CURRENT_PLAYER_MARK):
         display_board(D2_matrix)
         if not replay():
