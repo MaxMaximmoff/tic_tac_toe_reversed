@@ -179,10 +179,6 @@ while True:
     # Установка маркера игрока в указанную позицию
     place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
     D2_matrix = make_D2_matrix(PLAY_BOARD)
-    # submatrix = get_submatrix(D2_matrix, 0, 0)
-    # print(submatrix[0][0])
-    # print(submatrix)
-    # CURRENT_PLAYER_MARK = switch_player(CURRENT_PLAYER_MARK)
     print(check_game_finish(D2_matrix, CURRENT_PLAYER_MARK))
 
     # Проверка того, завершена ли игра check_game_finish(D2_matrix, mark)
