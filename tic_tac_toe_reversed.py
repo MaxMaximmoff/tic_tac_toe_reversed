@@ -186,12 +186,12 @@ while True:
 
     print(
         f'Бот играет за "{BOT_PLAYER_MARK}". Очередь игрока "{CURRENT_PLAYER_MARK}":')
-    # Выбор игроком следующей ячейки для хода и проверка того можно ли поставить маркер в эту ячейку
+
     if CURRENT_PLAYER_MARK == BOT_PLAYER_MARK:
         PLAYER_POSITION = False
         while (PLAYER_POSITION is False):
             PLAYER_POSITION = bot_choice(PLAY_BOARD)
-        # Установка маркера игрока в указанную позицию
+        # Установка маркера бота в указанную позицию
         place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
     else:
         PLAYER_POSITION = False
