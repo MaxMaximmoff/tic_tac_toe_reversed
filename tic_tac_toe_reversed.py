@@ -33,14 +33,11 @@ def get_submatrix(D2_matrix, begRow, begCol):
 def display_board(D2_matrix):
     """ Генерация игрового поля """
     for row in range(10):
-        if row == 0:
-            print(D2_matrix[row][0] + '  | ' + D2_matrix[row][1] + '  | ' + D2_matrix[row][2] + '  | ' + D2_matrix[row][3] + '  | ' + D2_matrix[row][4] +
-                  '  | ' + D2_matrix[row][5] + '  | ' + D2_matrix[row][6] + '  | ' + D2_matrix[row][7] + '  | ' + D2_matrix[row][8] + '  | ' + D2_matrix[row][9])
-            print('-- | -- | -- | -- | -- | -- | -- | -- | -- | --')
-        else:
-            print(D2_matrix[row][0] + ' | ' + D2_matrix[row][1] + ' | ' + D2_matrix[row][2] + ' | ' + D2_matrix[row][3] + ' | ' + D2_matrix[row][4] +
-                  ' | ' + D2_matrix[row][5] + ' | ' + D2_matrix[row][6] + ' | ' + D2_matrix[row][7] + ' | ' + D2_matrix[row][8] + ' | ' + D2_matrix[row][9])
-            print('-- | -- | -- | -- | -- | -- | -- | -- | -- | --')
+
+        print("%-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s" % (D2_matrix[row][0], D2_matrix[row][1], D2_matrix[row][2], D2_matrix[
+              row][3], D2_matrix[row][4], D2_matrix[row][5], D2_matrix[row][6], D2_matrix[row][7], D2_matrix[row][8], D2_matrix[row][9]))
+
+        print('-- | -- | -- | -- | -- | -- | -- | -- | -- | --')
 
 
 def win_check(submatrix, mark):
