@@ -184,7 +184,8 @@ while True:
     D2_matrix = make_D2_matrix(PLAY_BOARD)
     display_board(D2_matrix)
 
-    print(f'Очередь игрока "{CURRENT_PLAYER_MARK}":')
+    print(
+        f'Бот играет за "{BOT_PLAYER_MARK}". Очередь игрока "{CURRENT_PLAYER_MARK}":')
     # Выбор игроком следующей ячейки для хода и проверка того можно ли поставить маркер в эту ячейку
     if CURRENT_PLAYER_MARK == BOT_PLAYER_MARK:
         PLAYER_POSITION = False
