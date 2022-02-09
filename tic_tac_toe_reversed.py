@@ -4,58 +4,66 @@
 """
 
 import random
-PLAY_BOARD = [str(num) for num in range(1, 101)]
-PLAYERS_MARKS = ['X', 'O']
+play_board = [str(num) for num in range(1, 101)]
+player_marks = ['X', 'O']
 
 
-def make_D2_matrix(board):
+def make_matrix(board):
     """ Заполнение двухмерной матрицы """
-    D2_matrix = []
+
+    matrix = []
     for i in range(10):
         item = i * 10
         start = item  # start position of slice
         stop = start + 10  # end position of slice
         slice_object = slice(start, stop)
-        D2_matrix.append(board[slice_object])
-    return D2_matrix
+        matrix.append(board[slice_object])
+
+    for i in range(10):
+        for j in range(10):
+            if matrix[i][j] not in ('X', 'O'):
+                matrix[i][j] = ''
+
+    return matrix
 
 
-def get_submatrix(D2_matrix, begRow, begCol):
+def get_submatrix(matrix, beg_row, beg_col):
     """ Выделение матрицы 5 на 5 """
-    endRow = begRow + 4
-    endCol = begCol + 4
-    SubMatrix = []
-    for Row in D2_matrix[begRow: endRow+1]:
-        SubMatrix += [Row[begCol:endCol+1]]
-    return SubMatrix
+
+    end_row = beg_row + 4
+    end_col = beg_col + 4
+    submatrix = []
+    for row in matrix[beg_row: end_row+1]:
+        submatrix += [row[beg_col:end_col+1]]
+    return submatrix
 
 
-def display_board(D2_matrix):
+def display_board(matrix):
     """ Генерация игрового поля """
+
+    print('     1    2    3    4    5    6    7    8    9    10 ')
+    print('   |----|----|----|----|----|----|----|----|----|----|')
     for row in range(10):
+        row_num = str(row + 1)
+        print("%2s | %-3s| %-3s| %-3s| %-3s| %-3s| %-3s| %-3s| %-3s| %-3s| %-3s|" % (row_num, matrix[row][0], matrix[row][1], matrix[row][2], matrix[
+              row][3], matrix[row][4], matrix[row][5], matrix[row][6], matrix[row][7], matrix[row][8], matrix[row][9]))
 
-        print("%-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s | %-2s" % (D2_matrix[row][0], D2_matrix[row][1], D2_matrix[row][2], D2_matrix[
-              row][3], D2_matrix[row][4], D2_matrix[row][5], D2_matrix[row][6], D2_matrix[row][7], D2_matrix[row][8], D2_matrix[row][9]))
-
-        print('-- | -- | -- | -- | -- | -- | -- | -- | -- | --')
+        print('   |----|----|----|----|----|----|----|----|----|----|')
 
 
 def win_check(submatrix, mark):
     """ Проверка проиграл ли игрок с указанным маркером игру """
-    return (
-        (submatrix[0][0] == submatrix[0][1] == submatrix[0][2] == submatrix[0][3] == submatrix[0][4] == mark) or (
-            submatrix[1][0] == submatrix[1][1] == submatrix[1][2] == submatrix[1][3] == submatrix[1][4] == mark)
-        or (submatrix[2][0] == submatrix[2][1] == submatrix[2][2] == submatrix[2][3] == submatrix[2][4] == mark)
-        or (submatrix[3][0] == submatrix[3][1] == submatrix[3][2] == submatrix[3][3] == submatrix[3][4] == mark)
-        or (submatrix[4][0] == submatrix[4][1] == submatrix[4][2] == submatrix[4][3] == submatrix[4][4] == mark)
-        or (submatrix[0][0] == submatrix[1][0] == submatrix[2][0] == submatrix[3][0] == submatrix[4][0] == mark)
-        or (submatrix[0][1] == submatrix[1][1] == submatrix[2][1] == submatrix[3][1] == submatrix[4][1] == mark)
-        or (submatrix[0][2] == submatrix[1][2] == submatrix[2][2] == submatrix[3][2] == submatrix[4][2] == mark)
-        or (submatrix[0][3] == submatrix[1][3] == submatrix[2][3] == submatrix[3][3] == submatrix[4][3] == mark)
-        or (submatrix[0][4] == submatrix[1][4] == submatrix[2][4] == submatrix[3][4] == submatrix[4][4] == mark)
-        or (submatrix[0][0] == submatrix[1][1] == submatrix[2][2] == submatrix[3][3] == submatrix[4][4] == mark)
-        or (submatrix[0][4] == submatrix[1][3] == submatrix[2][2] == submatrix[3][1] == submatrix[4][0] == mark)
-    )
+
+    l = len(submatrix[0])
+    filled_line = [mark, mark, mark, mark, mark]
+    # Проверка заполнености по рядам, столбцам и двум главным диагоналям
+    for i in range(l):
+        if ((submatrix[:][i] == filled_line)
+            or ([x[i] for x in submatrix] == filled_line)
+            or ([submatrix[i][i] for i in range(l)] == filled_line)
+                or ([submatrix[l-1-i][i] for i in range(l-1, -1, -1)] == filled_line)):
+            return True
+    return False
 
 
 def player_input():
@@ -76,19 +84,20 @@ def player_input():
 
 def place_marker(board, marker, position):
     """Установка маркера игрока в указанную позицию"""
+
     board[position] = marker
 
 
 def choose_first():
     """Определение случайным образом игрока, который будет ходить первым"""
 
-    return PLAYERS_MARKS[random.choice((0, 1))]
+    return player_marks[random.choice((0, 1))]
 
 
 def space_check(board, position):
     """Определение пуста ли ячейка в указанной позиции"""
 
-    return board[position] not in PLAYERS_MARKS
+    return board[position] not in player_marks
 
 
 def full_board_check(board):
@@ -97,21 +106,30 @@ def full_board_check(board):
     return len(set(board)) == 2
 
 
-def player_choice(board, player_mark):
+def player_choice(board):
     """Выбор игроком следующей ячейки для хода и проверка того можно ли поставить маркер в эту ячейку"""
 
     position = 0
 
-    while position not in [num for num in range(1, 101)]:
+    while True:
+        coordinates = input(
+            "Введите координаты x и y через пробел: ").split()
         try:
-            position = int(
-                input(f'Игрок "{player_mark}", выберите ячейку с 1 по 100: '))
-        except ValueError as exc:
-            print(f'Неверное значение: {exc}. Пожалуйста, попробуйте снова.')
-
-    position -= 1
-    if space_check(board, position):
-        return position
+            x = int(coordinates[0])
+            y = int(coordinates[1])
+        except ValueError:
+            print("Вы должны вводить числа!")
+            continue
+        except IndexError:
+            print("Должно быть два числа с пробелом между ними!")
+            continue
+        if 0 < x < 11 and 0 < y < 11:
+            position = (y - 1) * 10 + x - 1
+            if space_check(board, position):
+                return position
+            print("Эта ячейка занята! Выберите другую!")
+        else:
+            print("Координаты должны быть от 1 до 10!")
 
     return False
 
@@ -151,65 +169,69 @@ def switch_player(mark):
     return 'O' if mark == 'X' else 'X'
 
 
-def check_game_finish(D2_matrix, mark):
+def check_game_finish(matrix, mark):
     """Проверка того, завершена ли игра"""
 
-    for begRow in range(0, 6):
-        for begCol in range(0, 6):
-            submatrix = get_submatrix(D2_matrix, begRow, begCol)
+    for beg_row in range(0, 6):
+        for beg_col in range(0, 6):
+            submatrix = get_submatrix(matrix, beg_row, beg_col)
             if win_check(submatrix, mark):
                 print(f'Игрок "{mark}" проиграл!')
                 return True
 
-    if full_board_check(PLAY_BOARD):
+    if full_board_check(play_board):
         print('Игра завершилась вничью.')
         return True
 
     return False
 
 
+# matrix = make_matrix(play_board)
+# display_board(matrix)
+
 print('Добро пожаловать в игру "Крестики-нолики-поддавки"!')
 
 # Выбор игровой роли: крестик или нолик
-PLAYER_MARKS = player_input()
+player_marks = player_input()
 # Маркер для бота
-BOT_PLAYER_MARK = PLAYER_MARKS[1]
+bot_player_mark = player_marks[1]
 # Определение случайным образом игрока, который будет ходить первым
-CURRENT_PLAYER_MARK = choose_first()
+current_player_mark = choose_first()
 
-print(f'Игрок "{CURRENT_PLAYER_MARK}" ходит первым.')
+print(f'Игрок "{current_player_mark}" ходит первым.')
 
 while True:
     # Генерация игрового поля
-    D2_matrix = make_D2_matrix(PLAY_BOARD)
-    display_board(D2_matrix)
+    matrix = make_matrix(play_board)
+    display_board(matrix)
 
     print(
-        f'Бот играет за "{BOT_PLAYER_MARK}". Очередь игрока "{CURRENT_PLAYER_MARK}":')
+        f'Бот играет за "{bot_player_mark}". Очередь игрока "{current_player_mark}":')
 
-    if CURRENT_PLAYER_MARK == BOT_PLAYER_MARK:
-        PLAYER_POSITION = False
-        while (PLAYER_POSITION is False):
-            PLAYER_POSITION = bot_choice(PLAY_BOARD)
+    if current_player_mark == bot_player_mark:
+        player_position = False
+        while (player_position is False):
+            player_position = bot_choice(play_board)
         # Установка маркера бота в указанную позицию
-        place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
+        place_marker(play_board, current_player_mark, player_position)
     else:
-        PLAYER_POSITION = False
-        while (PLAYER_POSITION is False):
-            PLAYER_POSITION = player_choice(PLAY_BOARD, CURRENT_PLAYER_MARK)
+        player_position = False
+        while (player_position is False):
+            player_position = player_choice(play_board)
         # Установка маркера игрока в указанную позицию
-        place_marker(PLAY_BOARD, CURRENT_PLAYER_MARK, PLAYER_POSITION)
-    D2_matrix = make_D2_matrix(PLAY_BOARD)
+        place_marker(play_board, current_player_mark, player_position)
+    matrix = make_matrix(play_board)
 
     # Проверка того, завершена ли игра
-    if check_game_finish(D2_matrix, CURRENT_PLAYER_MARK):
-        display_board(D2_matrix)
+    if check_game_finish(matrix, current_player_mark):
+        display_board(matrix)
         if not replay():
             break
         else:
-            PLAY_BOARD = [str(num) for num in range(1, 101)]
-            PLAYER_MARKS = player_input()
-            CURRENT_PLAYER_MARK = choose_first()
+            play_board = [str(num) for num in range(1, 101)]
+            player_marks = player_input()
+            bot_player_mark = player_marks[1]
+            current_player_mark = choose_first()
     else:
-        CURRENT_PLAYER_MARK = switch_player(CURRENT_PLAYER_MARK)
+        current_player_mark = switch_player(current_player_mark)
     clear_screen()
